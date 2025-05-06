@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/base}"
+      layout:fragment="content">
+<head>
+    <title>Listado de Productos</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-boxes me-2"></i>Listado de Productos</h1>
+        <a th:href="@{/productos/nuevo}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Nuevo Producto
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Categoría</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="producto : ${productos}" th:class="${producto.stock lt 5} ? 'table-warning'">
+                        <td th:text="${producto.id}"></td>
+                        <td th:text="${producto.nombre}"></td>
+                        <td th:text="${'$' + #numbers.formatDecimal(producto.precio, 1, 2)}"></td>
+                        <td>
+                                    <span th:text="${producto.stock}"
+                                          th:class="${producto.stock lt 5} ? 'badge bg-danger' : 'badge bg-success'">
+                                    </span>
+                        </td>
+                        <td>
+                            <span th:if="${producto.categoria}" th:text="${producto.categoria}" class="badge bg-info"></span>
+                            <span th:unless="${producto.categoria}" class="text-muted">N/A</span>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a th:href="@{/productos/editar/{id}(id=${producto.id})}"
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a th:href="@{/productos/eliminar/{id}(id=${producto.id})}"
+                                   class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('¿Está seguro de eliminar este producto?');">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
